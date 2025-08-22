@@ -1,0 +1,14 @@
+{
+  "$id": "Utente",
+  "type": "object",
+  "properties": {
+    "id": { "type": "integer" },
+    "nome": { "type": "string", "minLength": 2, "maxLength": 250,"pattern": "^[\\p{L}][\\p{L}\\p{Nd}'\\s]{2,250}$" },
+    "username": { "type": "string", "minLength": 2, "maxLength": 250,"pattern": "^[\\p{L}][\\p{L}\\p{Nd}'\\s]{2,250}$" },
+    "email": { "type": "string", "format": "email","maxLength": 250 },
+    "password": { "type": "string", "minLength": 8, "maxLength": 250 },
+    "date_iscrizione":{"type":"string", "format": "date-time"}
+  },
+  "required": ["id", "nome","username", "email","password","date_iscrizione"],
+  "additionalProperties": false
+}

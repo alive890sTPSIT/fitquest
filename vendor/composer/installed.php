@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'name' => '__root__',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
+        'reference' => null,
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => true,
+    ),
+    'versions' => array(
+        '__root__' => array(
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
+            'reference' => null,
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'justinrainbow/json-schema' => array(
+            'pretty_version' => '6.4.2',
+            'version' => '6.4.2.0',
+            'reference' => 'ce1fd2d47799bb60668643bc6220f6278a4c1d02',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../justinrainbow/json-schema',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'marc-mabe/php-enum' => array(
+            'pretty_version' => 'v4.7.1',
+            'version' => '4.7.1.0',
+            'reference' => '7159809e5cfa041dca28e61f7f7ae58063aae8ed',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../marc-mabe/php-enum',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+    ),
+);
