@@ -10,6 +10,6 @@ export interface Utente {
   nome: string;
   username: string;
   email: string;
-  password: string;
-  date_iscrizione: string;
+  password_hash: string;
+  data_iscrizione: string;
 }
