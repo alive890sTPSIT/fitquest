@@ -35,7 +35,29 @@ switch ($action) {
             ];
         }
         break;
-
+    case 'UpdateUtente':
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+            $response = UtentiController::Update($data);
+        } catch (\Throwable $th) {
+            $response = [
+                "success" => false,
+                "error" => "Aggiornamento utente fallito: " . $th->getMessage()
+            ];
+        }
+        break;
+    case 'DeleteUtente':
+        $id = $_GET['id'] ?? null;
+        if ($id === null) {
+            http_response_code(400);
+            $response = [
+                "success" => false,
+                "error" => "Parametro 'id' mancante"
+            ];
+        } else {
+            $response = UtentiController::Delete($id);
+        }
+        break;
     default:
         http_response_code(400);
         $response = [
