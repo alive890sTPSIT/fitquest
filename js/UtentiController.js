@@ -1,10 +1,22 @@
 class UtentiController {
-    static async Read() {
-        return $.ajax({
-            url: "router.php?action=ReadUtenti",
-            method: "GET",
-            dataType: "json"
-        });
+    // the actual implementation (with broadest params + async)
+    static async Read(id) {
+        if (id) {
+            // pretend: fetch single Utente
+            return $.ajax({
+                url: "router.php?action=ReadUtente&id=" + id,
+                method: "GET",
+                dataType: "json"
+            });
+        }
+        else {
+            // fetch all Utenti
+            return $.ajax({
+                url: "router.php?action=ReadUtenti",
+                method: "GET",
+                dataType: "json"
+            });
+        }
     }
     static async Create(utente) {
         return $.ajax({
