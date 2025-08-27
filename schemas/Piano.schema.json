@@ -1,0 +1,13 @@
+{
+    "$id":"Piano",
+    "type":"object",
+    "properties": {
+        "id":{"type":"integer"},
+        "utente_id":{"type":"integer"},
+        "nome": { "type": "string", "minLength": 1, "maxLength": 250,"pattern": "^[\\p{L}\\p{Nd}'\\s]{1,250}$" },
+        "descrizione":{"type":"string"}
+    },
+    "required": ["id","utente_id","nome","descrizione"],
+    "additionalProperties": false
+
+}
