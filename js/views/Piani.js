@@ -21,11 +21,11 @@ function formNewPiano() {
     <form>
       <div class="mb-3">
         <label class="form-label">ID</label>
-        <span class="form-control-plaintext" id="piano-id"></span>
+        <span class="form-control-plaintext" id="piano-id">New Id</span>
       </div>
       <div class="mb-3">
         <label for="piano-utente-id" class="form-label">Utente ID</label>
-        <input type="number" class="form-control" id="piano-utente-id">
+        <span class="form-control-plaintext" id="piano-utente-id">??</span>
       </div>
       <div class="mb-3">
         <label for="piano-nome" class="form-label">Nome</label>
@@ -46,7 +46,7 @@ function formNewPiano() {
         e.preventDefault();
         const piano = {
             id: 0,
-            utente_id: parseInt((form.querySelector("#piano-utente-id")).value),
+            utente_id: 0,
             nome: (form.querySelector("#piano-nome")).value,
             descrizione: (form.querySelector("#piano-descrizione")).value,
         };
@@ -90,7 +90,7 @@ function formPiano(data) {
       </div>
       <div class="mb-3">
         <label for="piano-utente-id-${data.id}" class="form-label">Utente ID</label>
-        <input type="number" class="form-control" id="piano-utente-id-${data.id}">
+        <span class="form-control-plaintext" id="piano-utente-id-${data.id}"></span>
       </div>
       <div class="mb-3">
         <label for="piano-nome-${data.id}" class="form-label">Nome</label>
@@ -110,14 +110,14 @@ function formPiano(data) {
   `;
     const form = template.content.firstElementChild;
     form.querySelector(`#piano-id-${data.id}`).textContent = data.id.toString();
-    (form.querySelector(`#piano-utente-id-${data.id}`)).value = data.utente_id.toString();
+    form.querySelector(`#piano-utente-id-${data.id}`).textContent = data.utente_id.toString();
     (form.querySelector(`#piano-nome-${data.id}`)).value = data.nome;
     (form.querySelector(`#piano-descrizione-${data.id}`)).value = data.descrizione;
     form.onsubmit = async (e) => {
         e.preventDefault();
         const piano = {
             id: data.id,
-            utente_id: parseInt((form.querySelector(`#piano-utente-id-${data.id}`)).value),
+            utente_id: parseInt(form.querySelector(`#piano-utente-id-${data.id}`).textContent),
             nome: (form.querySelector(`#piano-nome-${data.id}`)).value,
             descrizione: (form.querySelector(`#piano-descrizione-${data.id}`)).value,
         };

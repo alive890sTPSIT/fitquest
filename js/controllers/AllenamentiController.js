@@ -1,22 +1,24 @@
 class AllenamentiController {
     // The actual implementation
     static async Read(id) {
-        if (id) {
-            // Fetch single Allenamento
-            return $.ajax({
-                url: "router.php?action=ReadAllenamento&id=" + id,
+        return new Promise((resolve) => {
+            $.ajax({
+                url: id
+                    ? `router.php?action=readById&module=allenamento&id=${id}`
+                    : "router.php?action=read&module=allenamento",
                 method: "GET",
-                dataType: "json"
+                dataType: "json",
+                success: function (data) {
+                    resolve(data);
+                },
+                error: function (xhr, status, errorThrown) {
+                    resolve({
+                        success: false,
+                        error: `AJAX error: ${status} - ${errorThrown}`,
+                    });
+                },
             });
-        }
-        else {
-            // Fetch all Allenamenti
-            return $.ajax({
-                url: "router.php?action=ReadAllenamenti",
-                method: "GET",
-                dataType: "json"
-            });
-        }
+        });
     }
     static async Create(allenamento) {
         return $.ajax({

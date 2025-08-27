@@ -13,22 +13,27 @@ class AllenamentiController {
 
     // The actual implementation
     static async Read(id?: number): Promise<ApiResponse<Allenamento> | ApiResponse<Allenamento[]>> {
-        if (id) {
-            // Fetch single Allenamento
-            return $.ajax({
-                url: "router.php?action=ReadAllenamento&id=" + id,
-                method: "GET",
-                dataType: "json"
-            });
-        } else {
-            // Fetch all Allenamenti
-            return $.ajax({
-                url: "router.php?action=ReadAllenamenti",
-                method: "GET",
-                dataType: "json"
-            });
-        }
-    }
+  return new Promise((resolve) => {
+    $.ajax({
+      url: id
+        ? `router.php?action=readById&module=allenamento&id=${id}`
+        : "router.php?action=read&module=allenamento",
+      method: "GET",
+      dataType: "json",
+      success: function (
+        data: ApiResponse<Allenamento> | ApiResponse<Allenamento[]>
+      ) {
+        resolve(data);
+      },
+      error: function (xhr, status, errorThrown) {
+        resolve({
+          success: false,
+          error: `AJAX error: ${status} - ${errorThrown}`,
+        });
+      },
+    });
+  });
+}
 
     static async Create(allenamento: Allenamento): Promise<ApiResponse<{ id: number }>> {
         return $.ajax({

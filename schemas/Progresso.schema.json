@@ -1,0 +1,13 @@
+{
+    "$id":"Progresso",
+    "type":"object",
+    "properties": {
+        "id":{"type":"integer"},
+        "utente_id":{"type":"integer"},
+        "allenamento_id":{"type":"integer"},
+        "data":{"type":"string", "format": "date-time"},
+        "commenti":{"type":"string"}
+    },
+    "required": ["id","utente_id","allenamento_id","data","commenti"],
+    "additionalProperties": false
+}

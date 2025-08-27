@@ -6,7 +6,8 @@ class PianiController
 {
     public static function Read()
     {
-        $stmt = DataBase::getConnection()->prepare('SELECT * FROM piani');
+        $stmt = DataBase::getConnection()->prepare('SELECT * FROM piani where utente_id=:id');
+        $stmt->bindParam(":id",$_SESSION['user_id'],PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return [
@@ -15,14 +16,15 @@ class PianiController
         ];
     }
 
-    public static function ReadPiano($utente_id)
+    public static function ReadPiano($id)
     {
-        $stmt = DataBase::getConnection()->prepare('SELECT * FROM piani WHERE utente_id = :utente_id');
-        $stmt->bindParam(':utente_id', $utente_id, PDO::PARAM_INT);
+        $stmt = DataBase::getConnection()->prepare('SELECT * FROM piani WHERE utente_id = :utente_id and id=:id');
+        $stmt->bindParam(':utente_id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $stmt->bindParam(":id",$id,PDO::PARAM_INT);
+
         $stmt->execute();
         $piano = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$piano) {
-            http_response_code(404);
             return [
                 "success" => false,
                 "error" => "Piano non trovato per questo utente"
@@ -38,7 +40,6 @@ class PianiController
     {
         $pianoObject = json_decode(json_encode($piano)); // array → object
         if (!ModelValidator::validate($pianoObject, "../schemas/Piano.schema.json")) {
-            http_response_code(400);
             return ["success" => false, "error" => "Piano non valido"];
         }
         $stmt = DataBase::getConnection()->prepare(
@@ -46,55 +47,75 @@ class PianiController
              VALUES (:utente_id, :nome, :descrizione)'
         );
         $executeArray = [
-            'utente_id' => $piano['utente_id'],
+            'utente_id' => $_SESSION['user_id'],
             'nome' => $piano['nome'],
             'descrizione' => $piano['descrizione']
         ];
         if ($stmt->execute($executeArray)) {
-            http_response_code(201);
             return ["success" => true, "data" => ["id" => DataBase::getConnection()->lastInsertId()]];
         } else {
-            http_response_code(500);
             return ["success" => false, "error" => "Creazione piano fallita"];
         }
     }
 
-    public static function Update($piano)
-    {
-        $pianoObject = json_decode(json_encode($piano)); // array → object
-        if (!ModelValidator::validate($pianoObject, "../schemas/Piano.schema.json")) {
-            http_response_code(400);
-            return ["success" => false, "error" => "Piano non valido"];
-        }
-        $stmt = DataBase::getConnection()->prepare(
-            'UPDATE piani
-             SET nome = :nome, descrizione = :descrizione
-             WHERE id = :id'
-        );
-        $executeArray = [
-            'id' => $piano['id'],
-            'nome' => $piano['nome'],
-            'descrizione' => $piano['descrizione']
-        ];
-        if ($stmt->execute($executeArray)) {
-            http_response_code(200);
-            return ["success" => true];
-        } else {
-            http_response_code(500);
-            return ["success" => false, "error" => "Aggiornamento piano fallito"];
-        }
+   public static function Update($piano)
+{
+
+    $pianoObject = json_decode(json_encode($piano)); // array → object
+    if (!ModelValidator::validate($pianoObject, "../schemas/Piano.schema.json")) {
+        return ["success" => false, "error" => "Piano non valido"];
     }
 
-    public static function Delete($utente_id)
-    {
-        $stmt = DataBase::getConnection()->prepare('DELETE FROM piani WHERE utente_id = :utente_id');
-        $stmt->bindParam(':utente_id', $utente_id, PDO::PARAM_INT);
-        if ($stmt->execute()) {
-            http_response_code(200);
-            return ["success" => true];
+    $stmt = DataBase::getConnection()->prepare(
+        'UPDATE piani
+         SET nome = :nome, descrizione = :descrizione
+         WHERE id = :id AND utente_id = :id_utente'
+    );
+
+    $executeArray = [
+        'id' => $piano['id'],
+        'nome' => $piano['nome'],
+        'descrizione' => $piano['descrizione'],
+        'id_utente' => $_SESSION['user_id']
+    ];
+
+    if ($stmt->execute($executeArray)) {
+        if ($stmt->rowCount() > 0) {
+            return ["success" => true, "data" => "Updated successfully"];
         } else {
-            http_response_code(500);
-            return ["success" => false, "error" => "Cancellazione piano fallita"];
+            return ["success" => false, "error" => "Not your plan"];
         }
+    } else {
+        return ["success" => false, "error" => "Aggiornamento piano fallito"];
+    }
+}
+
+
+    public static function Delete($id)
+    {
+        $stmt = DataBase::getConnection()->prepare(
+        'DELETE FROM piani WHERE utente_id = :utente_id AND id = :id'
+    );
+    $stmt->bindParam(':utente_id', $_SESSION['user_id'], PDO::PARAM_INT);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+    if ($stmt->execute()) {
+        if ($stmt->rowCount() > 0) {
+            return [
+                "success" => true,
+                "data" => "Deleted successfully the plan"
+            ];
+        } else {
+            return [
+                "success" => false,
+                "error" => "Not your plan"
+            ];
+        }
+    } else {
+        return [
+            "success" => false,
+            "error" => "Cancellazione piano fallita"
+        ];
+    }
     }
 }

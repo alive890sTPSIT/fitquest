@@ -1,10 +1,10 @@
-class PianiController {
+class ProgressiController {
     static async Read(id) {
         return new Promise((resolve) => {
             $.ajax({
                 url: id
-                    ? `router.php?action=readById&module=piano&id=${id}`
-                    : "router.php?action=read&module=piano",
+                    ? `router.php?action=readById&module=progresso&id=${id}`
+                    : "router.php?action=read&module=progresso",
                 method: "GET",
                 dataType: "json",
                 success: function (data) {
@@ -19,13 +19,13 @@ class PianiController {
             });
         });
     }
-    static async Create(piano) {
+    static async Create(progresso) {
         return new Promise((resolve) => {
             $.ajax({
-                url: "router.php?action=create&module=piano",
+                url: "router.php?action=create&module=progresso",
                 method: "POST",
                 contentType: "application/json",
-                data: JSON.stringify(piano),
+                data: JSON.stringify(progresso),
                 dataType: "json",
                 success: function (data) {
                     resolve(data);
@@ -39,13 +39,13 @@ class PianiController {
             });
         });
     }
-    static async Update(piano) {
+    static async Update(progresso) {
         return new Promise((resolve) => {
             $.ajax({
-                url: "router.php?action=update&module=piano",
+                url: "router.php?action=update&module=progresso",
                 method: "PUT",
                 contentType: "application/json",
-                data: JSON.stringify(piano),
+                data: JSON.stringify(progresso),
                 dataType: "json",
                 success: function (data) {
                     resolve(data);
@@ -62,7 +62,7 @@ class PianiController {
     static async Delete(id) {
         return new Promise((resolve) => {
             $.ajax({
-                url: `router.php?action=delete&module=piano&id=${id}`,
+                url: `router.php?action=delete&module=progresso&id=${id}`,
                 method: "DELETE",
                 dataType: "json",
                 success: function (data) {
@@ -78,4 +78,4 @@ class PianiController {
         });
     }
 }
-export { PianiController };
+export { ProgressiController };

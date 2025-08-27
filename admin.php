@@ -59,7 +59,7 @@
       </div>
     </div>
     <!-- Delete Confirmation Modal -->
-  
+  </div>
 </body>
 
 </html>

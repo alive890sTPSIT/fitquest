@@ -11,12 +11,13 @@
 
 <body>
   <header>
-    <button class="btn-danger" id="btnLogOut">Log out</button>
+
+
   </header>
   <main>
-
+    
   </main>
-  
+
 </body>
 
 </html>

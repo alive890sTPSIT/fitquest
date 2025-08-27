@@ -29,15 +29,27 @@ class UtentiController {
         }
     }
 
-    static async Create(utente:Utente):Promise<ApiReponse<{id:number}>> {
-        return $.ajax({
-            url: "router.php?action=CreateUtente",
+    static async Create(utente: Utente): Promise<ApiReponse<{ id: number }>> {
+    return new Promise((resolve) => {
+        $.ajax({
+            url: "router.php?module=utente&action=create",
             method: "POST",
             contentType: "application/json",
             data: JSON.stringify(utente),
-            dataType: "json"
+            dataType: "json",
+            success: function (data: ApiReponse<{ id: number }>) {
+                resolve(data);
+            },
+            error: function (xhr, status, errorThrown) {
+                resolve({
+                    success: false,
+                    error: `AJAX error: ${status} - ${errorThrown}`,
+                });
+            },
         });
-    }
+    });
+}
+
     static async Update(utente:Utente) {
         return $.ajax({
             url: "router.php?action=UpdateUtente",

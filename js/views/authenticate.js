@@ -1,5 +1,28 @@
 import { AuthController } from "../controllers/AuthController.js";
 import { UtentiController } from "../controllers/UtentiController.js";
+export function btnLogOut() {
+    const template = document.createElement("template");
+    template.innerHTML = `
+    <button class="btn btn-danger" id="btnLogOut">Log out</button>
+  `;
+    const button = template.content.querySelector("#btnLogOut");
+    button.onclick = async (e) => {
+        e.preventDefault();
+        AuthController.logout().then((res) => {
+            if (res.success) {
+                document.cookie.split(";").forEach(cookie => {
+                    const name = cookie.split("=")[0].trim();
+                    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+                });
+                location.reload();
+            }
+            else {
+                alert(res.error || "Logout failed");
+            }
+        });
+    };
+    return button;
+}
 export function formAuthentication() {
     const template = document.createElement("template");
     template.innerHTML = `
@@ -71,10 +94,8 @@ export function formAuthentication() {
         };
         UtentiController.Create(utente).then((res) => {
             if (res.success) {
-                UtentiController.Read(res.data.id).then((res) => {
-                    if (res.success)
-                        location.reload();
-                });
+                if (res.success)
+                    location.reload();
             }
         });
     };

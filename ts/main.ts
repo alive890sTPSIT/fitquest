@@ -1,28 +1,29 @@
-import { formAuthentication } from "./views/Authenticate.js";
-import { AuthController } from "./controllers/AuthController.js";
+import { btnLogOut, formAuthentication } from "./views/Authenticate.js";
+import { dashboard } from "./views/Dashboard.js";
 import { PianiController } from "./controllers/PianiController.js";
-console.log("triying authentication");
 window.onload = async function () {
-  document.getElementById("btnLogOut")?.addEventListener('click',async ()=>{
-    const res=await AuthController.logout();
-    document.cookie.split(";").forEach(cookie => {
-    const name = cookie.split("=")[0].trim();
-    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
-});
+  const header=document.querySelector("header");
+  if(!header) return;
+  header.appendChild(btnLogOut())
 
-  })
-  console.log(document.cookie);
-  AuthController.login("mato","111111112").then(res=>console.  log(res))
-  PianiController.Read().then(res=>console.log(res))  
+  const main=document.querySelector("main");
+  if(!main) return;
+  // Example: check if PHPSESSID exists
+  const res=await PianiController.Read()
+  main.innerHTML="";
+  if(res.success)
+    main.appendChild(dashboard());
+    else
+      main.appendChild(formAuthentication())
 }
+/**
+ * ALL THIS USES WORK
+ */
+// PianiController.Read().then(res=>console.log(res))  
+// PianiController.Read(14).then(res=>console.log(res))  
+// PianiController.Read(16).then(res=>console.log(res))  
+// // PianiController.Delete(12).then(res=>console.log(res))  
+// PianiController.Create({id:-1,utente_id:-1,nome:'testing controller',descrizione:'im just writing some description'})
+// PianiController.Update({id:11,utente_id:-1,nome:'sorry reggae',descrizione:'you re being updated'}).then(res=>console.log(res))
 /*
-const main=document.querySelector("main");
-if(!main) return;
-// Example: check if PHPSESSID exists
-main.innerHTML="";
-if (document.cookie.includes("PHPSESSID=")) {
-  // main.appendChild();
-} else {
-  main.appendChild(formAuthentication());
-}
   */

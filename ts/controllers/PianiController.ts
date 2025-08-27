@@ -14,7 +14,7 @@ class PianiController {
         return new Promise((resolve) => {
             $.ajax({
                 url: id
-                    ? `router.php?action=read&module=piano&id=${id}`
+                    ? `router.php?action=readById&module=piano&id=${id}`
                     : "router.php?action=read&module=piano",
                 method: "GET",
                 dataType: "json",

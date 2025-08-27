@@ -19,12 +19,23 @@ class UtentiController {
         }
     }
     static async Create(utente) {
-        return $.ajax({
-            url: "router.php?action=CreateUtente",
-            method: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(utente),
-            dataType: "json"
+        return new Promise((resolve) => {
+            $.ajax({
+                url: "router.php?module=utente&action=create",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(utente),
+                dataType: "json",
+                success: function (data) {
+                    resolve(data);
+                },
+                error: function (xhr, status, errorThrown) {
+                    resolve({
+                        success: false,
+                        error: `AJAX error: ${status} - ${errorThrown}`,
+                    });
+                },
+            });
         });
     }
     static async Update(utente) {
